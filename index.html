@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Profundidad de Color Webcam</title>
+  <title>Profundidad de Color en Webcam y Fotografía</title>
   <style>
     :root {
       --primary: #5b5bff;
@@ -67,23 +67,39 @@
       height: 50px;
       margin-top: 8px;
     }
+    .photo-wrapper {
+      width: 100%;
+      max-width: 640px;
+      margin-top: 16px;
+      border: 4px solid var(--primary);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .photo-wrapper img {
+      width: 100%;
+      display: block;
+    }
   </style>
 </head>
 <body>
-  <h1>Profundidad de Color en Webcam</h1>
+  <h1>Profundidad de Color en Webcam y Fotografía</h1>
   <div class="controls">
     <button data-bits="1">1 bit (2 colores)</button>
     <button data-bits="2">2 bits (4 colores)</button>
     <button data-bits="4">4 bits (16 colores)</button>
     <button data-bits="5">5 bits (32 colores)</button>
     <button data-bits="8">8 bits (256 colores)</button>
-    <button id="capture-btn">Capturar y descargar</button>
   </div>
 
   <div class="canvas-container">
     <canvas id="video-canvas"></canvas>
     <canvas id="gradient-canvas"></canvas>
   </div>
+
+  <div class="photo-wrapper">
+    <img id="static-photo" src="https://veritascr.instructure.com/courses/16391/files/2660577/download?download_frd=1" alt="Fotografía de ejemplo">
+  </div>
+
   <video id="webcam" autoplay playsinline style="display:none"></video>
 
   <script>
@@ -93,7 +109,6 @@
     const vCtx = vCanvas.getContext('2d');
     const gCtx = gCanvas.getContext('2d');
     const bitButtons = document.querySelectorAll('.controls button[data-bits]');
-    const captureBtn = document.getElementById('capture-btn');
     let bits = 2;
 
     // Acceso a la webcam
@@ -148,18 +163,11 @@
         drawGradient();
       });
     });
-    // Por defecto 2 bits
+
+    // Selección por defecto 2 bits
     document.querySelector('[data-bits="2"]').click();
 
-    // Captura y descarga imagen
-    captureBtn.addEventListener('click', () => {
-      const link = document.createElement('a');
-      link.href = vCanvas.toDataURL('image/png');
-      link.download = 'captura_webcam.png';
-      link.click();
-    });
-
-    // Responde a redimensionamiento
+    // Ajuste en redimensionamiento
     window.addEventListener('resize', () => {
       if (video.videoWidth) {
         vCanvas.width = video.videoWidth;
